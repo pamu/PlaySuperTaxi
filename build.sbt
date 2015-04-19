@@ -1,4 +1,4 @@
-name := """hello-play-2_3-scala"""
+name := """PlaySuperTaxi"""
 
 version := "1.0-SNAPSHOT"
 
@@ -8,4 +8,4 @@ libraryDependencies ++= Seq(
   "org.webjars" % "requirejs" % "2.1.11-1"
 )
 
-lazy val root = (project in file(".")).addPlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
