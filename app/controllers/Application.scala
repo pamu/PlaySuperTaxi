@@ -12,7 +12,8 @@ object Application extends Controller {
 
   def client(id: Long, source: String, destination: String) = Action.async {
     Future {
-
+      import models.SampleDb._
+      save(id, source, destination)
       Ok("saved")
     }
 

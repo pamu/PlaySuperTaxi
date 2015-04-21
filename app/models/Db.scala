@@ -26,4 +26,8 @@ object SampleDb {
 
   lazy val db = Database.forURL(url = "jdbc:mysql://localhost:3306/demo", driver = "com.jdbc.mysql.Driver",
     user = "root", password = "root")
+
+  def save(id: Long, source: String, destination: String): Unit = db.withSession { implicit sx =>
+
+  }
 }
