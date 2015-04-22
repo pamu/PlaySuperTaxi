@@ -1,5 +1,7 @@
 package controllers
 
+import play.api.libs.EventSource
+import play.api.libs.iteratee.Enumerator
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
@@ -14,7 +16,6 @@ object Application extends Controller {
 
   def clientRequest() = Action.async(parse.json) { implicit request =>
     Future {
-
       Ok("saved")
     }
   }
@@ -29,12 +30,14 @@ object Application extends Controller {
     Ok(views.html.dashboard())
   }
 
+  val stream = Enumerator("java", "scala")
+
   def dashboardClientStream() = Action {
-    Ok()
+    Ok.chunked(stream &> EventSource()).as(EVENT_STREAM)
   }
 
   def dashboardDriverStream()  = Action {
-    Ok()
+    Ok.chunked(stream &> EventSource()).as(EVENT_STREAM)
   }
 
 }
