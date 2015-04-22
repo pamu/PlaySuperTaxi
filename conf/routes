@@ -3,8 +3,11 @@
 # ~~~~
 
 GET     /                           controllers.Application.index()
-GET     /client                     controllers.Application.client(id: Long, source: String, destination: String)
+POST    /clientRequest              controllers.Application.clientRequest()
 GET     /dashboard                  controllers.Application.dashboard()
+GET     /driver                     controllers.Application.driver()
+GET     /dashboardClientStream      controllers.Application.dashboardClientStream()
+GET     /dashboardDriverStream       controllers.Application.dashboardDriverStream()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

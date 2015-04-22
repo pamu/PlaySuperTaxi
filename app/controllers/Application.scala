@@ -12,24 +12,29 @@ object Application extends Controller {
     Ok(views.html.index("Hello :)"))
   }
 
-  def client(id: Long, source: String, destination: String) = Action.async {
+  def clientRequest() = Action.async(parse.json) { implicit request =>
     Future {
-      import models.SampleDb._
-      save(id, source, destination)
+
       Ok("saved")
     }
   }
 
-  def driver(id: Long, driverInfo: String) = Action.async {
+  def driver() = Action.async {
     Future {
-      import models.SampleDb._
-      save(id, driverInfo)
       Ok("saved")
     }
   }
 
   def dashboard() = Action { implicit request =>
     Ok(views.html.dashboard())
+  }
+
+  def dashboardClientStream() = Action {
+    Ok()
+  }
+
+  def dashboardDriverStream()  = Action {
+    Ok()
   }
 
 }
