@@ -28,6 +28,10 @@ object SampleDb {
     user = "root", password = "root")
 
   def save(id: Long, source: String, destination: String): Unit = db.withSession { implicit sx =>
+    
+  }
+
+  def save(id: Long, driverInfo: String) = db.withSession { implicit sx =>
 
   }
 }
