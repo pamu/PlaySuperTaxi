@@ -53,7 +53,7 @@ object Application extends Controller {
   }
 
   def fire(id: Long) = Action {
-    val driver = Driver(id, 1, "very experience", Some(1))
+    val driver = Driver(id, 1, "very experienced", Some(1))
     Global.cache ! AddDriver(driver)
     Ok("done")
   }

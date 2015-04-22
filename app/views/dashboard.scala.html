@@ -8,8 +8,9 @@
                     <thead>
                     <tr>
                         <th>UserID</th>
-                        <th>User Requests</th>
-                        <th>Action on User</th>
+                        <th>Source</th>
+                        <th>Destination</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody id="body">
@@ -21,15 +22,30 @@
                     <caption>Drivers</caption>
                     <thead>
                     <tr>
-                        <th>SNO</th>
                         <th>DriverID</th>
-                        <th>Driver Available</th>
-                        <th>Action on Driver</th>
+                        <th>Rating</th>
+                        <th>Description</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody id="body">
                     </tbody>
                 </table>
             </span>
+        </div>
+
+        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">Service User Request</h3>
+            </div>
+            <div class="modal-body">
+                <input id="driverID" type="text" placeholder="Enter the Driver ID"/>
+                <span id="msgCenter"></span>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button id="done" class="btn btn-primary">Done</button>
+            </div>
         </div>
 }

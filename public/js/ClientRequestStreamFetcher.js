@@ -6,9 +6,16 @@ $(function(){
             var json = e.data;
             //alert(json);
             var clientRequest = JSON.parse(json);
+            var button = "btn" + clientRequest.id;
+
             $("#clientsTable > tbody:last").append('<tr>' + '<th>' + clientRequest.idno + '</th>' +
             '<th>' + clientRequest.source + '</th>' + '<th>' + clientRequest.destination + '</th>' + '<th>' +
-            clientRequest.id + '</th>' + '</tr>');
+            '<button class="btn" id=' + button + '>Serve</button>' + '</th>' + '</tr>');
+
+            $("#"+button).click(function() {
+                $("#myModal").modal('show');
+            });
+
             console.log(json);
         });
     } else {
