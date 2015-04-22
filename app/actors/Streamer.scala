@@ -10,19 +10,27 @@ import play.api.libs.json.JsValue
 object Streamer {
   case object ClientRequestStream
   case object DriverStream
-  case class Push(jsValue: JsValue)
+  case class PushClientRequest(jsValue: JsValue)
+  case class PushDriver(jsValue: JsValue)
 }
 
 class Streamer extends Actor with ActorLogging {
   import Streamer._
-  val (in, out) = Concurrent.broadcast[JsValue]
+  val (cin, cout) = Concurrent.broadcast[String]
+  val (din, dout) = Concurrent.broadcast[String]
+
   override def receive = {
-    case Push(jsValue) => out push jsValue
+    case PushClientRequest(jsValue) =>
+      log.info("got a Push client request message {}", jsValue)
+      cout push jsValue.toString()
+    case PushDriver(jsValue) =>
+      log.info("got a Pus driver message {}", jsValue)
+      dout push jsValue.toString()
     case ClientRequestStream =>
-      sender ! in
+      sender ! cin
       log.info("Got a ClientRequestStream request")
     case DriverStream =>
-      sender ! in
+      sender ! din
       log.info("Got a DriverRequestStream request")
     case strange => log.info("strange message {} of type {}", strange, strange getClass)
   }

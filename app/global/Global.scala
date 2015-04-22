@@ -1,5 +1,6 @@
 package global
 
+import actors.Streamer
 import akka.actor.{Props, ActorSystem}
 import cache.Cache
 import play.api.{Logger, Application, GlobalSettings}
@@ -10,7 +11,8 @@ import play.api.{Logger, Application, GlobalSettings}
 object Global extends GlobalSettings {
 
   lazy val system = ActorSystem("SuperTaxiSystem")
-  lazy val cache = system.actorOf(Props[Cache], "CacheActor")
+  lazy val streamer = system.actorOf(Props[Streamer], "Streamer")
+  lazy val cache = system.actorOf(Props(new Cache(streamer)), "CacheActor")
 
   override def onStart(app: Application): Unit = {
     Logger.info("PlaySuperTaxi Started")

@@ -1,12 +1,22 @@
 package controllers
 
+import actors.Streamer.{DriverStream, ClientRequestStream}
+import akka.util.Timeout
+import cache.Cache.{AddClientRequest, AddDriver}
+import global.Global
+import models.{ClientRequest, Driver}
 import play.api.libs.EventSource
 import play.api.libs.iteratee.Enumerator
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+import scala.concurrent.duration._
+
+import akka.pattern.ask
 
 object Application extends Controller {
 
@@ -30,14 +40,28 @@ object Application extends Controller {
     Ok(views.html.dashboard())
   }
 
-  val stream = Enumerator("java", "scala")
-
-  def dashboardClientStream() = Action {
-    Ok.chunked(stream &> EventSource()).as(EVENT_STREAM)
+  def dashboardClientStream() = Action.async {
+    implicit val timeout = Timeout(5 seconds)
+    val future = (Global.streamer ? ClientRequestStream).mapTo[Enumerator[String]]
+    future.map(stream => Ok.chunked(stream &> EventSource()).as(EVENT_STREAM))
   }
 
-  def dashboardDriverStream()  = Action {
-    Ok.chunked(stream &> EventSource()).as(EVENT_STREAM)
+  def dashboardDriverStream()  = Action.async {
+    implicit val timeout = Timeout(5 seconds)
+    val future = (Global.streamer ? DriverStream).mapTo[Enumerator[String]]
+    future.map(stream => Ok.chunked(stream &> EventSource()).as(EVENT_STREAM))
+  }
+
+  def fire(id: Long) = Action {
+    val driver = Driver(id, 1, "very experience", Some(1))
+    Global.cache ! AddDriver(driver)
+    Ok("done")
+  }
+
+  def clientFire(id: Long) = Action {
+    val client = ClientRequest(id, "hyderabad", "delhi", Some(1))
+    Global.cache ! AddClientRequest(client)
+    Ok("done")
   }
 
 }

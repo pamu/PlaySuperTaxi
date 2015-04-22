@@ -1,7 +1,8 @@
 package cache
 
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{ActorRef, ActorLogging, Actor}
 import models.{Driver, ClientRequest}
+import play.api.libs.json.Json
 
 /**
  * Created by pnagarjuna on 22/04/15.
@@ -17,21 +18,31 @@ object Cache {
   case object Stats
 }
 
-class Cache extends Actor with ActorLogging {
+class Cache(streamer: ActorRef) extends Actor with ActorLogging {
 
   var clients = Map.empty[Long, ClientRequest]
   var drivers = Map.empty[Long, Driver]
   var engaged = Map.empty[Long, Long]
 
   import Cache._
+  import actors.Streamer._
+  import models.JsonUtils._
 
   override def receive = {
-    case AddClientRequest(clientRequest) if !(clients contains clientRequest.idno) =>
+    case AddClientRequest(clientRequest) =>
+      log.info("got a add client request message")
       clients += (clientRequest.idno -> clientRequest)
-    case AddDriver(driver) if !(drivers contains driver.idno) => drivers += (driver.idno -> driver)
+      streamer ! PushClientRequest(Json.toJson(clientRequest))
+
+    case AddDriver(driver) =>
+      log.info("got a add driver request message")
+      drivers += (driver.idno -> driver)
+      streamer ! PushDriver(Json.toJson(driver))
+
     case Engage(clientId, driverId) if (clients contains clientId) && (drivers contains driverId) =>
       engaged += (clientId -> driverId)
       engaged += (driverId -> clientId)
+
     case Stats =>
       if (clients.isEmpty)  log.info("No Clients")
       else log.info("Clients {}", clients mkString("\n", "\n", "\n"))
