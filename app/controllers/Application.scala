@@ -11,7 +11,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 object Application extends Controller {
 
   def index = Action {
-    Ok(views.html.index("Hello :)"))
+    Ok(views.html.index("Welcome to SuperTaxi Dispatcher Service."))
   }
 
   def clientRequest() = Action.async(parse.json) { implicit request =>

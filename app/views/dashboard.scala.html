@@ -2,41 +2,33 @@
 
 @main("Dispatcher Dashboard"){
         <div class="row">
-            <span class="span6">
-                <table class="table table-bordered">
+            <span id="clients" class="span6">
+                <table id="clientsTable" class="table table-bordered">
                     <caption>Clients</caption>
                     <thead>
                     <tr>
                         <th>SNO</th>
+                        <th>UserID</th>
                         <th>User Requests</th>
                         <th>Action on User</th>
                     </tr>
                     </thead>
                     <tbody id="body">
-                    <tr>
-                        <td>1</td>
-                        <td>User: 123 source: destination:</td>
-                        <td>allot driver/remove</td>
-                    </tr>
                     </tbody>
                 </table>
             </span>
-            <span class="span6">
-                <table class="table table-bordered">
+            <span id="drivers" class="span6">
+                <table id="driversTable" class="table table-bordered">
                     <caption>Drivers</caption>
                     <thead>
                     <tr>
                         <th>SNO</th>
-                        <th>Drivers Available</th>
+                        <th>DriverID</th>
+                        <th>Driver Available</th>
                         <th>Action on Driver</th>
                     </tr>
                     </thead>
                     <tbody id="body">
-                    <tr>
-                        <td>1</td>
-                        <td>Driver name</td>
-                        <td>remove</td>
-                    </tr>
                     </tbody>
                 </table>
             </span>
