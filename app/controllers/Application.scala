@@ -7,7 +7,7 @@ import global.Global
 import models.{ClientRequest, Driver}
 import play.api.libs.EventSource
 import play.api.libs.iteratee.Enumerator
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Json, JsError, JsSuccess, JsValue}
 import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.Future
@@ -26,13 +26,29 @@ object Application extends Controller {
 
   def clientRequest() = Action.async(parse.json) { implicit request =>
     Future {
-      Ok("saved")
+      import models.JsonUtils._
+      request.body.validate[ClientRequest] match {
+        case success: JsSuccess[ClientRequest] =>
+          val data = success.get
+          Global.cache ! AddClientRequest(data)
+          Ok(Json.obj("status" -> 200))
+        case e: JsError =>
+          Status(BAD_REQUEST).as("application/json")
+      }
     }
   }
 
-  def driver() = Action.async {
+  def driver() = Action.async(parse.json) { implicit request =>
     Future {
-      Ok("saved")
+      import models.JsonUtils._
+      request.body.validate[Driver] match {
+        case success: JsSuccess[Driver] =>
+          val data = success.get
+          Global.cache ! AddDriver(data)
+          Ok(Json.obj("status" -> 200))
+        case e: JsError =>
+          Status(BAD_REQUEST).as("application/json")
+      }
     }
   }
 
@@ -52,13 +68,13 @@ object Application extends Controller {
     future.map(stream => Ok.chunked(stream &> EventSource()).as(EVENT_STREAM))
   }
 
-  def fire(id: Long) = Action {
+  def drivers(id: Long) = Action {
     val driver = Driver(id, 1, "very experienced", Some(1))
     Global.cache ! AddDriver(driver)
     Ok("done")
   }
 
-  def clientFire(id: Long) = Action {
+  def clients(id: Long) = Action {
     val client = ClientRequest(id, "hyderabad", "delhi", Some(1))
     Global.cache ! AddClientRequest(client)
     Ok("done")

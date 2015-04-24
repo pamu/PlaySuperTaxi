@@ -8,8 +8,8 @@ GET     /dashboard                  controllers.Application.dashboard()
 GET     /driver                     controllers.Application.driver()
 GET     /dashboardClientStream      controllers.Application.dashboardClientStream()
 GET     /dashboardDriverStream      controllers.Application.dashboardDriverStream()
-GET     /fire/:id                   controllers.Application.fire(id: Long)
-GET     /clientFire/:id             controllers.Application.clientFire(id: Long)
+GET     /drivers/:id                controllers.Application.drivers(id: Long)
+GET     /clients/:id                controllers.Application.clients(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
